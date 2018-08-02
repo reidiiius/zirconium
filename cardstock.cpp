@@ -15,18 +15,20 @@ namespace Atelier {
     return s.substr(n) + s.substr(0, n);
   }
 
-  void view(map<string, string> m) {
-    string s;
+  void view(Cabinet & o) {
     map<string, string>::iterator h, t;
     int i, a[9] = {22, 12, 2, 16, 6, 20, 10, 0, 14};
+    string k, s;
+    time_t e = time(NULL);
 
     cout << '\n' << endl;
-    for (h = m.begin(), t = m.end(); h != t; h++)
+    for (h = o.m.begin(), t = o.m.end(); h != t; h++)
     {
       i = 0;
+      k = h->first;
       s = h->second;
 
-      cout << '\t' + h->first << endl;
+      cout << '\t' + k + "-e" << e << endl;
       while (i < 9) {
         cout << '\t' + tune(s, a[i]) << endl;
         i += 1;
@@ -83,7 +85,7 @@ int main()
     o.m["v3s6"]   = "4 9 _ 7 J _ T _ 8 _ _ 2 ";
     o.m["v6"]     = "4 9 _ 7 _ 5 T _ 8 Q _ _ ";
 
-  Atelier::view(o.m);
+  Atelier::view(o);
 
   return 0;
 }
