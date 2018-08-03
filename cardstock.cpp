@@ -11,8 +11,43 @@ struct Cabinet {
 
 namespace Atelier {
 
+  string xchange (string s, char b, char a) {
+    int i = 0;
+    while (i < s.length()) {
+      if (s[i] == b) {
+        s[i] = a;
+      }
+      i += 1;
+    }
+    return s;
+  }
+
+  string xchange (string s, string b, string a) {
+    size_t n;
+    n = s.find(b);
+    if (n != string::npos) {
+      s.replace(n, b.length(), a);
+    }
+    return s;
+  }
+
+  string fashion (string s) { 
+    char b[4] = {'T', 'J', 'Q', 'K'};
+    char a[4] = {'N', 'P', 'Q', 'R'};
+    int i = 0;
+    while (i < 4) {
+      s = xchange (s, b[i], a[i]);
+      i += 1;
+    }
+    while (i < 9) {
+      s = xchange (s, "_ ", "- ");
+      i += 1;
+    }
+    return s;
+  }
+
   string tune (string s, int n) {
-    return s.substr(n) + s.substr(0, n);
+    return fashion (s.substr(n) + s.substr(0, n));
   }
 
   void view(Cabinet & o) {
@@ -28,7 +63,7 @@ namespace Atelier {
       k = h->first;
       s = h->second;
 
-      cout << '\t' + k + "-e" << e << endl;
+     cout << '\t' + k + "-e" << e << endl;
       while (i < 9) {
         cout << '\t' + tune(s, a[i]) << endl;
         i += 1;

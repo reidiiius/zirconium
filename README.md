@@ -16,7 +16,7 @@ command line
 
     g++ -o paperboard cardstock.cpp
 
-    ./paperboard | less
+    ./paperboard > exchequer-$(date +'%s').txt
 
 ---
 
