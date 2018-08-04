@@ -1,15 +1,15 @@
 
 #include <iostream>
-#include <string>
 #include <map>
 
 using namespace std;
 
-struct Cabinet {
-  map<string, string> m;
-};
+namespace Phormium {
 
-namespace Atelier {
+  struct Cabinet {
+    map<string, string> m;
+    map<string, string>::iterator h, t;
+  };
 
   string xchange (string s, char b, char a) {
     int i = 0;
@@ -23,8 +23,7 @@ namespace Atelier {
   }
 
   string xchange (string s, string b, string a) {
-    size_t n;
-    n = s.find(b);
+    int n = s.find(b);
     if (n != string::npos) {
       s.replace(n, b.length(), a);
     }
@@ -32,40 +31,36 @@ namespace Atelier {
   }
 
   string fashion (string s) { 
-    char b[4] = {'T', 'J', 'Q', 'K'};
-    char a[4] = {'N', 'P', 'Q', 'R'};
-    int i = 0;
-    while (i < 4) {
+    string b = "TJK", a = "NPR";
+    int i = 0, n = b.length();
+    while (i < n) {
       s = xchange (s, b[i], a[i]);
       i += 1;
     }
-    while (i < 9) {
+    while (i < (n + 5)) {
       s = xchange (s, "_ ", "- ");
       i += 1;
     }
     return s;
   }
 
-  string tune (string s, int n) {
+  string permute (string s, int n) {
     return fashion (s.substr(n) + s.substr(0, n));
   }
 
-  void view(Cabinet & o) {
-    map<string, string>::iterator h, t;
+  void atelier (Cabinet & o) {
     int i, a[9] = {22, 12, 2, 16, 6, 20, 10, 0, 14};
     string k, s;
     time_t e = time(NULL);
-
     cout << '\n' << endl;
-    for (h = o.m.begin(), t = o.m.end(); h != t; h++)
+    for (o.h = o.m.begin(), o.t = o.m.end(); o.h != o.t; o.h++)
     {
       i = 0;
-      k = h->first;
-      s = h->second;
-
-     cout << '\t' + k + "-e" << e << endl;
+      k = o.h->first;
+      s = o.h->second;
+      cout << '\t' + k + "-e" << e << endl;
       while (i < 9) {
-        cout << '\t' + tune(s, a[i]) << endl;
+        cout << '\t' + permute(s, a[i]) << endl;
         i += 1;
       }
       cout << '\n' << endl;
@@ -76,7 +71,7 @@ namespace Atelier {
 
 int main()
 {
-  Cabinet o;
+  Phormium::Cabinet o;
     o.m["n0"]     = "4 9 _ 7 _ 5 T _ 8 _ 6 _ ";
     o.m["n167x4"] = "4 9 _ _ J _ T _ 8 Q 6 _ ";
     o.m["n26y5"]  = "4 _ _ 7 3 5 T _ _ _ 6 2 ";
@@ -120,7 +115,7 @@ int main()
     o.m["v3s6"]   = "4 9 _ 7 J _ T _ 8 _ _ 2 ";
     o.m["v6"]     = "4 9 _ 7 _ 5 T _ 8 Q _ _ ";
 
-  Atelier::view(o);
+  Phormium::atelier(o);
 
   return 0;
 }
