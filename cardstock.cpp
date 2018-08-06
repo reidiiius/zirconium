@@ -117,28 +117,11 @@ namespace Phormium {
 
   Cabinet populate(string s) {
     Cabinet o;
-    if (s == "ennead") {
-      o.n = 9;
-    }
-    else if (s == "beadgcf") {
-      o.n = 7;
-    }
-    else if (s == "eadgbe") {
-      o.n = 6;
-    }
-    else if (s == "cgdae") {
-      o.n = 5;
-    }
-    else if (s == "gdae") {
-      o.n = 4;
-    }
-    else {
-      o.n = 1;
-    }
 
     int i = 0;
     // ennead
-    if (o.n == 9) {
+    if (s == "ennead") {
+      o.n = 9;
       int u[9] = {33, 18, 3, 24, 9, 30, 15, 0, 21};
       while (i < o.n) {
         o.a[i] = u[i];
@@ -146,7 +129,8 @@ namespace Phormium {
       }
     }
     // BEADGCF
-    else if (o.n == 7) {
+    else if (s == "beadgcf") {
+      o.n = 7;
       int u[7] = {18, 3, 24, 9, 30, 15, 0};
       while (i < o.n) {
         o.a[i] = u[i];
@@ -154,7 +138,8 @@ namespace Phormium {
       }
     }
     // EADGBE
-    else if (o.n == 6) {
+    else if (s == "eadgbe") {
+      o.n = 6;
       int u[6] = {15, 0, 24, 9, 30, 15};
       while (i < o.n) {
         o.a[i] = u[i];
@@ -162,7 +147,8 @@ namespace Phormium {
       }
     }
     // CGDAE
-    else if (o.n == 5) {
+    else if (s == "cgdae") {
+      o.n = 5;
       int u[5] = {15, 30, 9, 24, 3};
       while (i < o.n) {
         o.a[i] = u[i];
@@ -170,7 +156,8 @@ namespace Phormium {
       }
     }
     // GDAE
-    else if (o.n == 4) {
+    else if (s == "gdae") {
+      o.n = 4;
       int u[4] = {15, 30, 9, 24};
       while (i < o.n) {
         o.a[i] = u[i];
@@ -235,8 +222,8 @@ namespace Phormium {
   }
 
   string xchange (string s, char b, char a) {
-    int i = 0;
-    while (i < s.length()) {
+    int i = 0, n = s.length();
+    while (i < n) {
       if (s[i] == b) {
         s[i] = a;
       }
@@ -246,9 +233,9 @@ namespace Phormium {
   }
 
   string xchange (string s, string b, string a) {
-    int n = s.find(b);
-    if (n != string::npos) {
-      s.replace(n, b.length(), a);
+    int i = s.find(b), n = b.length();
+    if (i != string::npos) {
+      s.replace(i, n, a);
     }
     return s;
   }
@@ -282,10 +269,11 @@ namespace Phormium {
   }
 
   string permute (string s, int n) {
-    if (s.length() == 24) {
+    int b = s.length();
+    if (b == 24) {
       return copperSmith (s.substr(n) + s.substr(0, n));
     }
-    else if (s.length() == 36) {
+    else if (b == 36) {
       return silverSmith (s.substr(n) + s.substr(0, n));
     }
     else {
@@ -322,15 +310,24 @@ namespace Phormium {
 
 int main()
 {
-  Phormium::atelier("ennead");
-/*
- argument options
+/* argument options
   9 || ennead
   7 || beadgcf
   6 || eadgbe
   5 || cgdae
   4 || gdae
 */
+
+  for (int i = 4; i < 10; i++) {
+    if (i == 8) continue;
+    Phormium::atelier(i);
+  }
+
+  string a[5] = {"gdae", "cgdae", "eadgbe", "beadgcf", "ennead"};
+  for (int i = 0; i < 5; i++) {
+    Phormium::atelier(a[i]); 
+  }
+
   return 0;
 }
 
