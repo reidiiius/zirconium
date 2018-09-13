@@ -1,4 +1,4 @@
-
+// cardstock.cpp
 #include <iostream>
 #include <map>
 
@@ -7,7 +7,7 @@ using namespace std;
 namespace Phormium {
 
   struct Cabinet {
-    int n, a[9];
+    short n, a[9];
     map<string, string> m;
     map<string, string>::iterator h, t;
     time_t e;
@@ -61,14 +61,14 @@ namespace Phormium {
     return m;
   }
 
-  Cabinet populate(string s) {
+  Cabinet populate(const string s) {
     Cabinet o;
     o.e = time(NULL);
 
-    int i = 0;
+    short i = 0;
     if (s == "ennead") {
       o.n = 9;
-      int u[9] = {33, 18, 3, 24, 9, 30, 15, 0, 21};
+      short u[9] = {33, 18, 3, 24, 9, 30, 15, 0, 21};
       while (i < o.n) {
         o.a[i] = u[i];
         i += 1;
@@ -76,7 +76,7 @@ namespace Phormium {
     }
     else if (s == "fkbjdn") {
       o.n = 6;
-      int u[6] = {9, 33, 21, 9, 33, 21};
+      short u[6] = {9, 33, 21, 9, 33, 21};
       while (i < o.n) {
         o.a[i] = u[i];
         i += 1;
@@ -84,7 +84,7 @@ namespace Phormium {
     }
     else if (s == "eadgbe") {
       o.n = 6;
-      int u[6] = {15, 0, 24, 9, 30, 15};
+      short u[6] = {15, 0, 24, 9, 30, 15};
       while (i < o.n) {
         o.a[i] = u[i];
         i += 1;
@@ -92,7 +92,7 @@ namespace Phormium {
     }
     else if (s == "cgdae") {
       o.n = 5;
-      int u[5] = {15, 30, 9, 24, 3};
+      short u[5] = {15, 30, 9, 24, 3};
       while (i < o.n) {
         o.a[i] = u[i];
         i += 1;
@@ -100,7 +100,7 @@ namespace Phormium {
     }
     else if (s == "bfbf") {
       o.n = 4;
-      int u[4] = {18, 0, 18, 0};
+      short u[4] = {18, 0, 18, 0};
       while (i < o.n) {
         o.a[i] = u[i];
         i += 1;
@@ -109,7 +109,7 @@ namespace Phormium {
     else {
       o.n = 1;
       o.a[0] = 0;
-      o.m["z0"] = "Error, check argument value: " + s;
+      o.m["??"] = "Error, check argument value: " + s;
       return o;
     }
 
@@ -119,7 +119,7 @@ namespace Phormium {
   }
 
   string xchange (string s, char b, char a) {
-    int i = 0, n = s.length();
+    short i = 0, n = s.length();
     while (i < n) {
       if (s[i] == b) {
         s[i] = a;
@@ -131,7 +131,7 @@ namespace Phormium {
 
   string silverSmith (string s) { 
     string b = "_opqrstuvwxyz", a = "-23456789NPQR";
-    int i = 0, n = b.length();
+    short i = 0, n = b.length();
     while (i < n) {
       s = xchange (s, b[i], a[i]);
       i += 1;
@@ -139,8 +139,8 @@ namespace Phormium {
     return s;
   }
 
-  string permute (string s, int n) {
-    int b = s.length();
+  string permute (const string s, short n) {
+    short b = s.length();
     if (b == 36) {
       return silverSmith (s.substr(n) + s.substr(0, n));
     }
@@ -149,33 +149,69 @@ namespace Phormium {
     }
   }
 
-  void concierge (Cabinet & o, string s) {
-    int i;
-    cout << '\n' << endl;
+  void concierge (Cabinet & o, const string s) {
+    short i;
+    cout << '\n' << '\n';
     for (o.h = o.m.begin(), o.t = o.m.end(); o.h != o.t; o.h++)
     {
       i = 0;
-      cout << '\t' + o.h->first + '-' + s + "-e" << o.e << endl;
+      cout << '\t' + o.h->first + '-' + s + "-e" << o.e << '\n';
       while (i < o.n) {
-        cout << '\t' + permute(o.h->second, o.a[i]) << endl;
+        cout << '\t' + permute(o.h->second, o.a[i]) << '\n';
         i += 1;
       }
       cout << '\n' << endl;
     }
   }
 
-  void atelier(string s) {
-    Cabinet o = populate(s);
-    concierge(o, s);
+  void showMenu() {
+    string a[5] = {"bfbf", "cgdae", "eadgbe", "fkbjdn", "ennead"};
+    cout << '\n';
+    cout << "Selection:\n" << '\n';
+    for (short i = 0; i < 5; i++) {
+      cout << '\t' + a[i] << '\n';
+    }
+    cout << endl;
+  }
+
+  void uSage() {
+    showMenu();
+    cout << "View output:\n";
+    cout << "\n\t./paperboard eadgbe | sensible-pager\n" << '\n';
+    cout << "Save output:\n";
+    cout << "\n\t./paperboard eadgbe > exchequer-$(date +'%s').txt\n" << endl;
+  }
+
+  void atelier(const string s) {
+    bool b;
+    if (s == "bfbf"   or
+        s == "cgdae"  or
+        s == "eadgbe" or
+        s == "ennead" or
+        s == "fkbjdn")
+         { b = 1; }
+    else { b = 0; }
+
+    if (not b) {
+      uSage();
+    }
+    else {
+      Cabinet o = populate(s);
+      concierge(o, s); // ref o
+    }
   }
 
 }
 
-int main()
+int main(int argc, char** argv)
 {
-  string a[5] = {"bfbf", "cgdae", "eadgbe", "fkbjdn", "ennead"};
-  for (int i = 0; i < 5; i++) {
-    Phormium::atelier(a[i]); 
+  string s;
+
+  if (argc > 1) {
+    Phormium::atelier(argv[1]);
+  }
+  else {
+    Phormium::uSage();
   }
 
   return 0;
