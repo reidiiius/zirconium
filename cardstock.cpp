@@ -203,9 +203,7 @@ namespace Phormium {
 
 }
 
-int main(int argc, char** argv)
-{
-  string s;
+int main(int argc, char** argv) {
 
   if (argc > 1) {
     Phormium::atelier(argv[1]);
