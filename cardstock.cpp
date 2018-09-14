@@ -61,50 +61,42 @@ namespace Phormium {
     return m;
   }
 
+  void pegbox (Cabinet & o, const short u[]) {
+    short i = 0;
+    while (i < o.n) {
+      o.a[i] = u[i];
+      i += 1;
+    }
+  }
+
   Cabinet populate(const string s) {
     Cabinet o;
     o.e = time(NULL);
 
-    short i = 0;
     if (s == "ennead") {
       o.n = 9;
       short u[9] = {33, 18, 3, 24, 9, 30, 15, 0, 21};
-      while (i < o.n) {
-        o.a[i] = u[i];
-        i += 1;
-      }
+      pegbox (o, u);
     }
     else if (s == "fkbjdn") {
       o.n = 6;
       short u[6] = {9, 33, 21, 9, 33, 21};
-      while (i < o.n) {
-        o.a[i] = u[i];
-        i += 1;
-      }
+      pegbox (o, u);
     }
     else if (s == "eadgbe") {
       o.n = 6;
       short u[6] = {15, 0, 24, 9, 30, 15};
-      while (i < o.n) {
-        o.a[i] = u[i];
-        i += 1;
-      }
+      pegbox (o, u);
     }
     else if (s == "cgdae") {
       o.n = 5;
       short u[5] = {15, 30, 9, 24, 3};
-      while (i < o.n) {
-        o.a[i] = u[i];
-        i += 1;
-      }
+      pegbox (o, u);
     }
     else if (s == "bfbf") {
       o.n = 4;
       short u[4] = {18, 0, 18, 0};
-      while (i < o.n) {
-        o.a[i] = u[i];
-        i += 1;
-      }
+      pegbox (o, u);
     }
     else {
       o.n = 1;
@@ -152,8 +144,7 @@ namespace Phormium {
   void concierge (Cabinet & o, const string s) {
     short i;
     cout << '\n' << '\n';
-    for (o.h = o.m.begin(), o.t = o.m.end(); o.h != o.t; o.h++)
-    {
+    for (o.h = o.m.begin(), o.t = o.m.end(); o.h != o.t; o.h++) {
       i = 0;
       cout << '\t' + o.h->first + '-' + s + "-e" << o.e << '\n';
       while (i < o.n) {
