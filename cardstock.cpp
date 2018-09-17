@@ -10,6 +10,7 @@ namespace Phormium {
     short n, a[9];
     map<string, string> m;
     map<string, string>::iterator h, t;
+    string s;
     time_t e;
   };
 
@@ -69,33 +70,33 @@ namespace Phormium {
     }
   }
 
-  Cabinet populate(const string s) {
+  Cabinet populate(const string & s) {
     Cabinet o;
     o.e = time(NULL);
 
     if (s == "ennead") {
       o.n = 9;
-      short u[9] = {33, 18, 3, 24, 9, 30, 15, 0, 21};
+      short u[] = {33, 18, 3, 24, 9, 30, 15, 0, 21};
       pegbox (o, u);
     }
     else if (s == "fkbjdn") {
       o.n = 6;
-      short u[6] = {9, 33, 21, 9, 33, 21};
+      short u[] = {9, 33, 21, 9, 33, 21};
       pegbox (o, u);
     }
     else if (s == "eadgbe") {
       o.n = 6;
-      short u[6] = {15, 0, 24, 9, 30, 15};
+      short u[] = {15, 0, 24, 9, 30, 15};
       pegbox (o, u);
     }
     else if (s == "cgdae") {
       o.n = 5;
-      short u[5] = {15, 30, 9, 24, 3};
+      short u[] = {15, 30, 9, 24, 3};
       pegbox (o, u);
     }
     else if (s == "bfbf") {
       o.n = 4;
-      short u[4] = {18, 0, 18, 0};
+      short u[] = {18, 0, 18, 0};
       pegbox (o, u);
     }
     else {
@@ -105,6 +106,7 @@ namespace Phormium {
       return o;
     }
 
+    o.s = s;
     o.m = boethius();
 
     return o;
@@ -131,7 +133,7 @@ namespace Phormium {
     return s;
   }
 
-  string permute (const string s, short n) {
+  string permute (const string & s, short & n) {
     short b = s.length();
     if (b == 36) {
       return silverSmith (s.substr(n) + s.substr(0, n));
@@ -141,12 +143,12 @@ namespace Phormium {
     }
   }
 
-  void concierge (Cabinet & o, const string s) {
+  void concierge (Cabinet & o) {
     short i;
-    cout << '\n' << '\n';
+    cout << "\n\n";
     for (o.h = o.m.begin(), o.t = o.m.end(); o.h != o.t; o.h++) {
       i = 0;
-      cout << '\t' + o.h->first + '-' + s + "-e" << o.e << '\n';
+      cout << '\t' + o.h->first + '-' + o.s + "-e" << o.e << '\n';
       while (i < o.n) {
         cout << '\t' + permute(o.h->second, o.a[i]) << '\n';
         i += 1;
@@ -156,7 +158,7 @@ namespace Phormium {
   }
 
   void showMenu() {
-    string a[5] = {"bfbf", "cgdae", "eadgbe", "fkbjdn", "ennead"};
+    string a[] = {"bfbf", "cgdae", "eadgbe", "fkbjdn", "ennead"};
     cout << '\n';
     cout << "Selection:\n" << '\n';
     for (short i = 0; i < 5; i++) {
@@ -173,7 +175,7 @@ namespace Phormium {
     cout << "\n\t./paperboard eadgbe > exchequer-$(date +'%s').txt\n" << endl;
   }
 
-  void atelier(const string s) {
+  void atelier(const string & s) {
     bool b;
     if (s == "bfbf"   or
         s == "cgdae"  or
@@ -188,7 +190,7 @@ namespace Phormium {
     }
     else {
       Cabinet o = populate(s);
-      concierge(o, s); // ref o
+      concierge(o); // ref o
     }
   }
 
