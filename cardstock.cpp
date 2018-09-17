@@ -176,22 +176,9 @@ namespace Phormium {
   }
 
   void atelier(const string & s) {
-    bool b;
-    if (s == "bfbf"   or
-        s == "cgdae"  or
-        s == "eadgbe" or
-        s == "ennead" or
-        s == "fkbjdn")
-         { b = 1; }
-    else { b = 0; }
-
-    if (not b) {
-      uSage();
-    }
-    else {
-      Cabinet o = populate(s);
-      concierge(o); // ref o
-    }
+    Cabinet o = populate(s);
+    if (o.n < 2) uSage();
+    else concierge(o); // ref o
   }
 
 }
@@ -199,11 +186,10 @@ namespace Phormium {
 int main(int argc, char** argv) {
 
   if (argc > 1) {
-    Phormium::atelier(argv[1]);
+    const string s = argv[1];
+    Phormium::atelier(s);
   }
-  else {
-    Phormium::uSage();
-  }
+  else Phormium::uSage();
 
   return 0;
 }
