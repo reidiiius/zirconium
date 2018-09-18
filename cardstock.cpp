@@ -1,5 +1,6 @@
 // cardstock.cpp
 #include <iostream>
+#include <string>
 #include <map>
 
 using namespace std;
@@ -14,7 +15,7 @@ namespace Phormium {
     time_t e;
   };
 
-  map<string, string> boethius () {
+  map<string, string> boethius() {
     map<string, string> m;
     m["j136y7"]  = "qy __ __ tw xr __ wt __ uv yq so __ ";
     m["j167y2"]  = "qy vu __ __ __ rx wt __ uv yq __ os ";
@@ -62,7 +63,7 @@ namespace Phormium {
     return m;
   }
 
-  void pegbox (Cabinet & o, const short u[]) {
+  void pegbox(Cabinet& o, const short u[]) {
     short i = 0;
     while (i < o.n) {
       o.a[i] = u[i];
@@ -70,7 +71,7 @@ namespace Phormium {
     }
   }
 
-  Cabinet populate(const string & s) {
+  Cabinet populate(const string& s) {
     Cabinet o;
     o.e = time(NULL);
 
@@ -112,7 +113,7 @@ namespace Phormium {
     return o;
   }
 
-  string xchange (string s, char b, char a) {
+  string xchange(string s, char b, char a) {
     short i = 0, n = s.length();
     while (i < n) {
       if (s[i] == b) {
@@ -123,7 +124,7 @@ namespace Phormium {
     return s;
   }
 
-  string silverSmith (string s) { 
+  string silverSmith(string s) { 
     string b = "_opqrstuvwxyz", a = "-23456789NPQR";
     short i = 0, n = b.length();
     while (i < n) {
@@ -133,7 +134,7 @@ namespace Phormium {
     return s;
   }
 
-  string permute (const string & s, short & n) {
+  string permute(const string& s, short& n) {
     short b = s.length();
     if (b == 36) {
       return silverSmith (s.substr(n) + s.substr(0, n));
@@ -143,7 +144,7 @@ namespace Phormium {
     }
   }
 
-  void concierge (Cabinet & o) {
+  void concierge(Cabinet& o) {
     short i;
     cout << "\n\n";
     for (o.h = o.m.begin(), o.t = o.m.end(); o.h != o.t; o.h++) {
@@ -157,6 +158,32 @@ namespace Phormium {
     }
   }
 
+  void concierge(Cabinet& o, const string& v) {
+    short i = 0;
+    cout << "\n\n";
+    cout << '\t' + v + '-' + o.s + "-e" << o.e << '\n';
+    while (i < o.n) {
+      cout << '\t' + permute(o.m[v], o.a[i]) << '\n';
+      i += 1;
+    }
+    cout << '\n' << endl;
+  }
+
+  void concierge(Cabinet& o, const string& v, const string& x) {
+    short i;
+    const string q[] = {v, x};
+    for (short n = 0; n < 2; n++) {
+      i = 0;
+      cout << "\n\n";
+      cout << '\t' + q[n] + '-' + o.s + "-e" << o.e << '\n';
+      while (i < o.n) {
+        cout << '\t' + permute(o.m[q[n]], o.a[i]) << '\n';
+        i += 1;
+      }
+    }
+    cout << '\n' << endl;
+  }
+
   void showMenu() {
     string a[] = {"bfbf", "cgdae", "eadgbe", "fkbjdn", "ennead"};
     cout << '\n';
@@ -167,29 +194,72 @@ namespace Phormium {
     cout << endl;
   }
 
+  void signat(Cabinet& o) {
+    short i = 0;
+    cout << "Signature:\n";
+    for (o.h = o.m.begin(), o.t = o.m.end(); o.h != o.t; o.h++) {
+      if (i % 7 == 0) cout << '\n';
+      else cout << '\t' + o.h->first;
+      i += 1;
+    }
+    cout << "\n\n\t./paperboard eadgbe n0 j3\n" << endl;
+  }
+
   void uSage() {
     showMenu();
-    cout << "View output:\n";
+    cout << "Screenful:\n";
     cout << "\n\t./paperboard eadgbe | sensible-pager\n" << '\n';
-    cout << "Save output:\n";
+    cout << "Save text:\n";
     cout << "\n\t./paperboard eadgbe > exchequer-$(date +'%s').txt\n" << endl;
   }
 
-  void atelier(const string & s) {
+  void atelier(const string& s) {
     Cabinet o = populate(s);
     if (o.n < 2) uSage();
     else concierge(o); // ref o
   }
 
-}
+  void atelier(const string& s, const string& v) {
+    Cabinet o = populate(s);
+    if (o.n < 2) uSage();
+    else if (o.m.count(v))
+      concierge(o, v);
+    else {
+      showMenu();
+      signat (o);
+    }
+  }
+
+  void atelier(const string& s, const string& v, const string& x) {
+    Cabinet o = populate(s);
+    if (o.n < 2) uSage();
+    else if (o.m.count(v) and o.m.count(x))
+      concierge(o, v, x);
+    else {
+      showMenu();
+      signat (o);
+    }
+  }
+
+} // close Phormium
 
 int main(int argc, char** argv) {
 
-  if (argc > 1) {
-    const string s = argv[1];
-    Phormium::atelier(s);
+  switch (argc) {
+    case 2 : {
+      const string s = argv[1];
+      Phormium::atelier(s);
+    } break;
+    case 3 : {
+      const string s = argv[1], v = argv[2];
+      Phormium::atelier(s, v);
+    } break;
+    case 4 : {
+      const string s = argv[1], v = argv[2], x = argv[3];
+      Phormium::atelier(s, v, x);
+    } break;
+    default: Phormium::uSage();
   }
-  else Phormium::uSage();
 
   return 0;
 }
