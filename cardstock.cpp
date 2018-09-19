@@ -77,27 +77,27 @@ namespace Phormium {
 
     if (s == "ennead") {
       o.n = 9;
-      short u[] = {33, 18, 3, 24, 9, 30, 15, 0, 21};
+      const short u[] = {33, 18, 3, 24, 9, 30, 15, 0, 21};
       pegbox (o, u);
     }
     else if (s == "fkbjdn") {
       o.n = 6;
-      short u[] = {9, 33, 21, 9, 33, 21};
+      const short u[] = {9, 33, 21, 9, 33, 21};
       pegbox (o, u);
     }
     else if (s == "eadgbe") {
       o.n = 6;
-      short u[] = {15, 0, 24, 9, 30, 15};
+      const short u[] = {15, 0, 24, 9, 30, 15};
       pegbox (o, u);
     }
     else if (s == "cgdae") {
       o.n = 5;
-      short u[] = {15, 30, 9, 24, 3};
+      const short u[] = {15, 30, 9, 24, 3};
       pegbox (o, u);
     }
     else if (s == "bfbf") {
       o.n = 4;
-      short u[] = {18, 0, 18, 0};
+      const short u[] = {18, 0, 18, 0};
       pegbox (o, u);
     }
     else {
@@ -113,7 +113,7 @@ namespace Phormium {
     return o;
   }
 
-  string xchange(string s, char b, char a) {
+  string xchange(string& s, const char& b, const char& a) {
     short i = 0, n = s.length();
     while (i < n) {
       if (s[i] == b) {
@@ -124,9 +124,10 @@ namespace Phormium {
     return s;
   }
 
-  string silverSmith(string s) { 
-    string b = "_opqrstuvwxyz", a = "-23456789NPQR";
-    short i = 0, n = b.length();
+  const string silverSmith(string s) { 
+    const string b = "_opqrstuvwxyz", a = "-23456789NPQR";
+    const short n = b.length();
+    short i = 0;
     while (i < n) {
       s = xchange (s, b[i], a[i]);
       i += 1;
@@ -134,8 +135,8 @@ namespace Phormium {
     return s;
   }
 
-  string permute(const string& s, short& n) {
-    short b = s.length();
+  const string permute(const string& s, const short& n) {
+    const short b = s.length();
     if (b == 36)
       return silverSmith (s.substr(n) + s.substr(0, n));
     else
@@ -145,7 +146,7 @@ namespace Phormium {
   void concierge(Cabinet& o) {
     short i;
     cout << "\n\n";
-    for (o.h = o.m.begin(), o.t = o.m.end(); o.h != o.t; o.h++) {
+    for (o.h = o.m.begin(), o.t = o.m.end(); o.h != o.t; ++o.h) {
       i = 0;
       cout << '\t' + o.h->first + '-' + o.s + "-e" << o.e << '\n';
       while (i < o.n) {
@@ -170,12 +171,12 @@ namespace Phormium {
   void concierge(Cabinet& o, const string& v, const string& x) {
     short i;
     const string q[] = {v, x};
-    for (short n = 0; n < 2; n++) {
+    for (short k = 0; k < 2; ++k) {
       i = 0;
       cout << "\n\n";
-      cout << '\t' + q[n] + '-' + o.s + "-e" << o.e << '\n';
+      cout << '\t' + q[k] + '-' + o.s + "-e" << o.e << '\n';
       while (i < o.n) {
-        cout << '\t' + permute(o.m[q[n]], o.a[i]) << '\n';
+        cout << '\t' + permute(o.m[q[k]], o.a[i]) << '\n';
         i += 1;
       }
     }
@@ -184,20 +185,21 @@ namespace Phormium {
 
   void showMenu() {
     const string a[] = {"bfbf", "cgdae", "eadgbe", "fkbjdn", "ennead"};
-    cout << '\n';
-    cout << "Selection:\n" << '\n';
-    for (short i = 0; i < 5; i++) {
+    cout << "\nSelection:\n\n";
+    for (short i = 0; i < 5; ++i) {
       cout << '\t' + a[i] << '\n';
     }
     cout << endl;
   }
 
-  void signat(Cabinet& o) {
+  void signat() {
+    map<std::string, std::string> m = boethius();
+    map<std::string, std::string>::iterator h, t;
     short i = 0;
     cout << "Signature:\n";
-    for (o.h = o.m.begin(), o.t = o.m.end(); o.h != o.t; o.h++) {
+    for (h = m.begin(), t = m.end(); h != t; ++h) {
       if (i % 7 == 0) cout << '\n';
-      else cout << '\t' + o.h->first;
+      else cout << '\t' + h->first;
       i += 1;
     }
     cout << "\n\n\t./paperboard eadgbe n0 j3\n" << endl;
@@ -205,8 +207,9 @@ namespace Phormium {
 
   void uSage() {
     showMenu();
+    signat();
     cout << "Screenful:\n";
-    cout << "\n\t./paperboard eadgbe | sensible-pager\n" << '\n';
+    cout << "\n\t./paperboard eadgbe | sensible-pager\n\n";
     cout << "Save text:\n";
     cout << "\n\t./paperboard eadgbe > exchequer-$(date +'%s').txt\n" << endl;
   }
@@ -224,7 +227,7 @@ namespace Phormium {
       concierge(o, v);
     else {
       showMenu();
-      signat (o);
+      signat();
     }
   }
 
@@ -235,7 +238,7 @@ namespace Phormium {
       concierge(o, v, x);
     else {
       showMenu();
-      signat (o);
+      signat();
     }
   }
 
