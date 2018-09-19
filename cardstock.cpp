@@ -136,12 +136,10 @@ namespace Phormium {
 
   string permute(const string& s, short& n) {
     short b = s.length();
-    if (b == 36) {
+    if (b == 36)
       return silverSmith (s.substr(n) + s.substr(0, n));
-    }
-    else {
+    else
       return s + " ?";
-    }
   }
 
   void concierge(Cabinet& o) {
@@ -185,7 +183,7 @@ namespace Phormium {
   }
 
   void showMenu() {
-    string a[] = {"bfbf", "cgdae", "eadgbe", "fkbjdn", "ennead"};
+    const string a[] = {"bfbf", "cgdae", "eadgbe", "fkbjdn", "ennead"};
     cout << '\n';
     cout << "Selection:\n" << '\n';
     for (short i = 0; i < 5; i++) {
