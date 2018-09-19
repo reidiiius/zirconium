@@ -71,31 +71,31 @@ namespace Phormium {
     }
   }
 
-  Cabinet populate(const string& s) {
+  Cabinet populate(const string& tuning) {
     Cabinet o;
     o.e = time(NULL);
 
-    if (s == "ennead") {
+    if (tuning == "ennead") {
       o.n = 9;
       const short u[] = {33, 18, 3, 24, 9, 30, 15, 0, 21};
       pegbox (o, u);
     }
-    else if (s == "fkbjdn") {
+    else if (tuning == "fkbjdn") {
       o.n = 6;
       const short u[] = {9, 33, 21, 9, 33, 21};
       pegbox (o, u);
     }
-    else if (s == "eadgbe") {
+    else if (tuning == "eadgbe") {
       o.n = 6;
       const short u[] = {15, 0, 24, 9, 30, 15};
       pegbox (o, u);
     }
-    else if (s == "cgdae") {
+    else if (tuning == "cgdae") {
       o.n = 5;
       const short u[] = {15, 30, 9, 24, 3};
       pegbox (o, u);
     }
-    else if (s == "bfbf") {
+    else if (tuning == "bfbf") {
       o.n = 4;
       const short u[] = {18, 0, 18, 0};
       pegbox (o, u);
@@ -103,11 +103,11 @@ namespace Phormium {
     else {
       o.n = 1;
       o.a[0] = 0;
-      o.m["??"] = "Error, check argument value: " + s;
+      o.m["??"] = "Error, check argument value: " + tuning;
       return o;
     }
 
-    o.s = s;
+    o.s = tuning;
     o.m = boethius();
 
     return o;
@@ -158,20 +158,20 @@ namespace Phormium {
     }
   }
 
-  void concierge(Cabinet& o, const string& v) {
+  void concierge(Cabinet& o, const string& keySig) {
     short i = 0;
     cout << "\n\n";
-    cout << '\t' + v + '-' + o.s + "-e" << o.e << '\n';
+    cout << '\t' + keySig + '-' + o.s + "-e" << o.e << '\n';
     while (i < o.n) {
-      cout << '\t' + permute(o.m[v], o.a[i]) << '\n';
+      cout << '\t' + permute(o.m[keySig], o.a[i]) << '\n';
       i += 1;
     }
     cout << '\n' << endl;
   }
 
-  void concierge(Cabinet& o, const string& v, const string& x) {
+  void concierge(Cabinet& o, const string& keySig, const string& keyAlt) {
     short i;
-    const string q[] = {v, x};
+    const string q[] = {keySig, keyAlt};
     for (short k = 0; k < 2; ++k) {
       i = 0;
       cout << "\n\n";
@@ -184,7 +184,7 @@ namespace Phormium {
     cout << '\n' << endl;
   }
 
-  void showMenu() {
+  void menu_tuning() {
     const string a[] = {"bfbf", "cgdae", "eadgbe", "fkbjdn", "ennead"};
     cout << "\nSelection:\n\n";
     for (short i = 0; i < 5; ++i) {
@@ -193,7 +193,7 @@ namespace Phormium {
     cout << endl;
   }
 
-  void signat() {
+  void menu_signat() {
     map<string, string> m = boethius();
     map<string, string>::iterator h, t;
     short i = 0;
@@ -206,40 +206,40 @@ namespace Phormium {
     cout << "\n\n\t./paperboard eadgbe n0 j3\n" << endl;
   }
 
-  void uSage() {
-    showMenu();
-    signat();
+  void menu_usage() {
+    menu_tuning();
+    menu_signat();
     cout << "Screenful:\n";
     cout << "\n\t./paperboard eadgbe | sensible-pager\n\n";
     cout << "Save text:\n";
     cout << "\n\t./paperboard eadgbe > exchequer-$(date +'%s').txt\n" << endl;
   }
 
-  void atelier(const string& s) {
-    Cabinet o = populate(s);
-    if (o.n < 2) uSage();
+  void atrium(const string& tuning) {
+    Cabinet o = populate(tuning);
+    if (o.n < 2) menu_usage();
     else concierge(o);
   }
 
-  void atelier(const string& s, const string& v) {
-    Cabinet o = populate(s);
-    if (o.n < 2) uSage();
-    else if (o.m.count(v))
-      concierge(o, v);
+  void atrium(const string& tuning, const string& keySig) {
+    Cabinet o = populate(tuning);
+    if (o.n < 2) menu_usage();
+    else if (o.m.count(keySig))
+      concierge(o, keySig);
     else {
-      showMenu();
-      signat();
+      menu_tuning();
+      menu_signat();
     }
   }
 
-  void atelier(const string& s, const string& v, const string& x) {
-    Cabinet o = populate(s);
-    if (o.n < 2) uSage();
-    else if (o.m.count(v) and o.m.count(x))
-      concierge(o, v, x);
+  void atrium(const string& tuning, const string& keySig, const string& keyAlt) {
+    Cabinet o = populate(tuning);
+    if (o.n < 2) menu_usage();
+    else if (o.m.count(keySig) and o.m.count(keyAlt))
+      concierge(o, keySig, keyAlt);
     else {
-      showMenu();
-      signat();
+      menu_tuning();
+      menu_signat();
     }
   }
 
@@ -249,18 +249,18 @@ int main(int argc, char** argv) {
 
   switch (argc) {
     case 2 : {
-      const string s = argv[1];
-      Phormium::atelier(s);
+      const string tuning = argv[1];
+      Phormium::atrium(tuning);
     } break;
     case 3 : {
-      const string s = argv[1], v = argv[2];
-      Phormium::atelier(s, v);
+      const string tuning = argv[1], keySig = argv[2];
+      Phormium::atrium(tuning, keySig);
     } break;
     case 4 : {
-      const string s = argv[1], v = argv[2], x = argv[3];
-      Phormium::atelier(s, v, x);
+      const string tuning = argv[1], keySig = argv[2], keyAlt = argv[3];
+      Phormium::atrium(tuning, keySig, keyAlt);
     } break;
-    default: Phormium::uSage();
+    default: Phormium::menu_usage();
   }
 
   return 0;
