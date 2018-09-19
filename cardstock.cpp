@@ -114,7 +114,8 @@ namespace Phormium {
   }
 
   string xchange(string& s, const char& b, const char& a) {
-    short i = 0, n = s.length();
+    const short n = s.length();
+    short i = 0;
     while (i < n) {
       if (s[i] == b) {
         s[i] = a;
