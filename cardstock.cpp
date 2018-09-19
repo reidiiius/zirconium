@@ -193,8 +193,8 @@ namespace Phormium {
   }
 
   void signat() {
-    map<std::string, std::string> m = boethius();
-    map<std::string, std::string>::iterator h, t;
+    map<string, string> m = boethius();
+    map<string, string>::iterator h, t;
     short i = 0;
     cout << "Signature:\n";
     for (h = m.begin(), t = m.end(); h != t; ++h) {
@@ -217,7 +217,7 @@ namespace Phormium {
   void atelier(const string& s) {
     Cabinet o = populate(s);
     if (o.n < 2) uSage();
-    else concierge(o); // ref o
+    else concierge(o);
   }
 
   void atelier(const string& s, const string& v) {
