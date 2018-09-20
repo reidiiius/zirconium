@@ -10,9 +10,9 @@ namespace Phormium {
   struct Cabinet {
     short n, a[9];
     map<string, string> m;
-    map<string, string>::iterator h, t;
-    string s;
-    time_t e;
+    map<string, string>::iterator head, tail;
+    string tuned;
+    time_t epoch;
   };
 
   map<string, string> boethius() {
@@ -73,7 +73,7 @@ namespace Phormium {
 
   Cabinet populate(const string& tuning) {
     Cabinet o;
-    o.e = time(NULL);
+    o.epoch = time(NULL);
 
     if (tuning == "ennead") {
       o.n = 9;
@@ -107,51 +107,55 @@ namespace Phormium {
       return o;
     }
 
-    o.s = tuning;
+    o.tuned = tuning;
     o.m = boethius();
 
     return o;
   }
 
-  string xchange(string& s, const char& b, const char& a) {
-    const short n = s.length();
+  string xchange(string& specie, const char& b, const char& a) {
+    const short n = specie.length();
     short i = 0;
     while (i < n) {
-      if (s[i] == b) {
-        s[i] = a;
-      }
+      if (specie[i] == b) specie[i] = a;
       i += 1;
     }
-    return s;
+    return specie;
   }
 
-  const string silverSmith(string s) { 
+  const string silverSmith(string& specie) { 
     const string b = "_opqrstuvwxyz", a = "-23456789NPQR";
-    const short n = b.length();
-    short i = 0;
-    while (i < n) {
-      s = xchange (s, b[i], a[i]);
-      i += 1;
+    const short n = b.length(), u = a.length();
+    if (n == u) {
+      short i = 0;
+      while (i < n) {
+        specie = xchange(specie, b[i], a[i]);
+        i += 1;
+      }
+      return specie;
     }
-    return s;
+    else
+      return specie;
   }
 
-  const string permute(const string& s, const short& n) {
-    const short b = s.length();
-    if (b == 36)
-      return silverSmith (s.substr(n) + s.substr(0, n));
+  const string permute(const string& genus, const short& ndx) {
+    const short b = genus.length();
+    if (b == 36) {
+      string specie (genus.substr(ndx) + genus.substr(0, ndx));
+      return silverSmith(specie);
+    }
     else
-      return s + " ?";
+      return genus + " ?";
   }
 
   void concierge(Cabinet& o) {
     short i;
     cout << "\n\n";
-    for (o.h = o.m.begin(), o.t = o.m.end(); o.h != o.t; ++o.h) {
+    for (o.head = o.m.begin(), o.tail = o.m.end(); o.head != o.tail; ++o.head) {
       i = 0;
-      cout << '\t' + o.h->first + '-' + o.s + "-e" << o.e << '\n';
+      cout << '\t' + o.head->first + '-' + o.tuned + "-e" << o.epoch << '\n';
       while (i < o.n) {
-        cout << '\t' + permute(o.h->second, o.a[i]) << '\n';
+        cout << '\t' + permute(o.head->second, o.a[i]) << '\n';
         i += 1;
       }
       cout << '\n' << endl;
@@ -161,7 +165,7 @@ namespace Phormium {
   void concierge(Cabinet& o, const string& keySig) {
     short i = 0;
     cout << "\n\n";
-    cout << '\t' + keySig + '-' + o.s + "-e" << o.e << '\n';
+    cout << '\t' + keySig + '-' + o.tuned + "-e" << o.epoch << '\n';
     while (i < o.n) {
       cout << '\t' + permute(o.m[keySig], o.a[i]) << '\n';
       i += 1;
@@ -175,7 +179,7 @@ namespace Phormium {
     for (short k = 0; k < 2; ++k) {
       i = 0;
       cout << "\n\n";
-      cout << '\t' + q[k] + '-' + o.s + "-e" << o.e << '\n';
+      cout << '\t' + q[k] + '-' + o.tuned + "-e" << o.epoch << '\n';
       while (i < o.n) {
         cout << '\t' + permute(o.m[q[k]], o.a[i]) << '\n';
         i += 1;
@@ -195,12 +199,12 @@ namespace Phormium {
 
   void menu_signat() {
     map<string, string> m = boethius();
-    map<string, string>::iterator h, t;
+    map<string, string>::iterator head, tail;
     short i = 0;
     cout << "Signature:\n";
-    for (h = m.begin(), t = m.end(); h != t; ++h) {
+    for (head = m.begin(), tail = m.end(); head != tail; ++head) {
       if (i % 7 == 0) cout << '\n';
-      else cout << '\t' + h->first;
+      else cout << '\t' + head->first;
       i += 1;
     }
     cout << "\n\n\t./paperboard eadgbe n0 j3\n" << endl;
