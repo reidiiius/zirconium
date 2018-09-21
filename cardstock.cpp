@@ -1,4 +1,5 @@
 // cardstock.cpp
+#include <exception>
 #include <iostream>
 #include <string>
 #include <map>
@@ -8,7 +9,7 @@ using namespace std;
 namespace Phormium {
 
   struct Cabinet {
-    short n, a[9];
+    unsigned short cords, pitch[9];
     map<string, string> m;
     map<string, string>::iterator head, tail;
     string tuned;
@@ -63,10 +64,10 @@ namespace Phormium {
     return m;
   }
 
-  void pegbox(Cabinet& o, const short u[]) {
-    short i = 0;
-    while (i < o.n) {
-      o.a[i] = u[i];
+  void pegbox(Cabinet& o, const unsigned short tension[]) {
+    unsigned short i = 0;
+    while (i < o.cords) {
+      o.pitch[i] = tension[i];
       i += 1;
     }
   }
@@ -76,33 +77,33 @@ namespace Phormium {
     o.epoch = time(NULL);
 
     if (tuning == "ennead") {
-      o.n = 9;
-      const short u[] = {33, 18, 3, 24, 9, 30, 15, 0, 21};
-      pegbox (o, u);
+      o.cords = 9;
+      const unsigned short tension[] = {33, 18, 3, 24, 9, 30, 15, 0, 21};
+      pegbox(o, tension);
     }
     else if (tuning == "fkbjdn") {
-      o.n = 6;
-      const short u[] = {9, 33, 21, 9, 33, 21};
-      pegbox (o, u);
+      o.cords = 6;
+      const unsigned short tension[] = {9, 33, 21, 9, 33, 21};
+      pegbox(o, tension);
     }
     else if (tuning == "eadgbe") {
-      o.n = 6;
-      const short u[] = {15, 0, 24, 9, 30, 15};
-      pegbox (o, u);
+      o.cords = 6;
+      const unsigned short tension[] = {15, 0, 24, 9, 30, 15};
+      pegbox(o, tension);
     }
     else if (tuning == "cgdae") {
-      o.n = 5;
-      const short u[] = {15, 30, 9, 24, 3};
-      pegbox (o, u);
+      o.cords = 5;
+      const unsigned short tension[] = {15, 30, 9, 24, 3};
+      pegbox(o, tension);
     }
     else if (tuning == "bfbf") {
-      o.n = 4;
-      const short u[] = {18, 0, 18, 0};
-      pegbox (o, u);
+      o.cords = 4;
+      const unsigned short tension[] = {18, 0, 18, 0};
+      pegbox(o, tension);
     }
     else {
-      o.n = 1;
-      o.a[0] = 0;
+      o.cords = 1;
+      o.pitch[0] = 0;
       o.m["??"] = "Error, check argument value: " + tuning;
       return o;
     }
@@ -113,23 +114,23 @@ namespace Phormium {
     return o;
   }
 
-  string xchange(string& specie, const char& b, const char& a) {
-    const short n = specie.length();
-    short i = 0;
+  string exchange(string& specie, const char& before, const char& after) {
+    const unsigned short n = specie.length();
+    unsigned short i = 0;
     while (i < n) {
-      if (specie[i] == b) specie[i] = a;
+      if (specie[i] == before) specie[i] = after;
       i += 1;
     }
     return specie;
   }
 
   const string silverSmith(string& specie) { 
-    const string b = "_opqrstuvwxyz", a = "-23456789NPQR";
-    const short n = b.length(), u = a.length();
+    const string before = "_opqrstuvwxyz", after = "-23456789NPQR";
+    const unsigned short n = before.length(), u = after.length();
     if (n == u) {
-      short i = 0;
+      unsigned short i = 0;
       while (i < n) {
-        specie = xchange(specie, b[i], a[i]);
+        specie = exchange(specie, before[i], after[i]);
         i += 1;
       }
       return specie;
@@ -138,10 +139,10 @@ namespace Phormium {
       return specie;
   }
 
-  const string permute(const string& genus, const short& ndx) {
-    const short b = genus.length();
-    if (b == 36) {
-      string specie (genus.substr(ndx) + genus.substr(0, ndx));
+  const string permute(const string& genus, const unsigned short& amulet) {
+    const unsigned short n = genus.length();
+    if (n == 36) {
+      string specie (genus.substr(amulet).append(genus.substr(0, amulet)));
       return silverSmith(specie);
     }
     else
@@ -149,13 +150,13 @@ namespace Phormium {
   }
 
   void concierge(Cabinet& o) {
-    short i;
+    unsigned short i;
     cout << "\n\n";
     for (o.head = o.m.begin(), o.tail = o.m.end(); o.head != o.tail; ++o.head) {
-      i = 0;
+      i = 0; // reset
       cout << '\t' + o.head->first + '-' + o.tuned + "-e" << o.epoch << '\n';
-      while (i < o.n) {
-        cout << '\t' + permute(o.head->second, o.a[i]) << '\n';
+      while (i < o.cords) {
+        cout << '\t' + permute(o.head->second, o.pitch[i]) << '\n';
         i += 1;
       }
       cout << '\n' << endl;
@@ -163,44 +164,47 @@ namespace Phormium {
   }
 
   void concierge(Cabinet& o, const string& keySig) {
-    short i = 0;
+    unsigned short i = 0;
     cout << "\n\n";
     cout << '\t' + keySig + '-' + o.tuned + "-e" << o.epoch << '\n';
-    while (i < o.n) {
-      cout << '\t' + permute(o.m[keySig], o.a[i]) << '\n';
+    while (i < o.cords) {
+      cout << '\t' + permute(o.m[keySig], o.pitch[i]) << '\n';
       i += 1;
     }
     cout << '\n' << endl;
   }
 
   void concierge(Cabinet& o, const string& keySig, const string& keyAlt) {
-    short i;
-    const string q[] = {keySig, keyAlt};
-    for (short k = 0; k < 2; ++k) {
-      i = 0;
+    unsigned short i;
+    const string clef[] = {keySig, keyAlt};
+    for (unsigned short k = 0; k < 2; ++k) {
+      i = 0; // reset
       cout << "\n\n";
-      cout << '\t' + q[k] + '-' + o.tuned + "-e" << o.epoch << '\n';
-      while (i < o.n) {
-        cout << '\t' + permute(o.m[q[k]], o.a[i]) << '\n';
+      cout << '\t' + clef[k] + '-' + o.tuned + "-e" << o.epoch << '\n';
+      while (i < o.cords) {
+        cout << '\t' + permute(o.m[clef[k]], o.pitch[i]) << '\n';
         i += 1;
       }
     }
     cout << '\n' << endl;
   }
 
-  void menu_tuning() {
-    const string a[] = {"bfbf", "cgdae", "eadgbe", "fkbjdn", "ennead"};
-    cout << "\nSelection:\n\n";
-    for (short i = 0; i < 5; ++i) {
-      cout << '\t' + a[i] << '\n';
+  void menu_variety() {
+    try {
+      const string tunings[] = {"bfbf", "cgdae", "eadgbe", "fkbjdn", "ennead"};
+      cout << "\nSelection:\n\n";
+      for (unsigned short i = 0; i < 5; ++i) cout << '\t' + tunings[i] << '\n';
+      cout << endl;
     }
-    cout << endl;
+    catch (const exception& anomaly) {
+      cerr << "\tCheck array length: " << anomaly.what() << '\n' << endl;
+    }
   }
 
   void menu_signat() {
     map<string, string> m = boethius();
     map<string, string>::iterator head, tail;
-    short i = 0;
+    unsigned short i = 0;
     cout << "Signature:\n";
     for (head = m.begin(), tail = m.end(); head != tail; ++head) {
       if (i % 7 == 0) cout << '\n';
@@ -211,7 +215,7 @@ namespace Phormium {
   }
 
   void menu_usage() {
-    menu_tuning();
+    menu_variety();
     menu_signat();
     cout << "Screenful:\n";
     cout << "\n\t./paperboard eadgbe | sensible-pager\n\n";
@@ -221,28 +225,28 @@ namespace Phormium {
 
   void atrium(const string& tuning) {
     Cabinet o = populate(tuning);
-    if (o.n < 2) menu_usage();
+    if (o.cords < 2) menu_usage();
     else concierge(o);
   }
 
   void atrium(const string& tuning, const string& keySig) {
     Cabinet o = populate(tuning);
-    if (o.n < 2) menu_usage();
+    if (o.cords < 2) menu_usage();
     else if (o.m.count(keySig))
       concierge(o, keySig);
     else {
-      menu_tuning();
+      menu_variety();
       menu_signat();
     }
   }
 
   void atrium(const string& tuning, const string& keySig, const string& keyAlt) {
     Cabinet o = populate(tuning);
-    if (o.n < 2) menu_usage();
+    if (o.cords < 2) menu_usage();
     else if (o.m.count(keySig) and o.m.count(keyAlt))
       concierge(o, keySig, keyAlt);
     else {
-      menu_tuning();
+      menu_variety();
       menu_signat();
     }
   }
