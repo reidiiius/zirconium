@@ -8,9 +8,9 @@ using namespace std;
 
 namespace Phormium {
 
-  struct Cabinet {
+  struct Wampum {
     unsigned short cords, pitch[9];
-    map<string, string> m;
+    map<string, string> carta;
     map<string, string>::iterator head, tail;
     string tuned;
     time_t epoch;
@@ -64,60 +64,60 @@ namespace Phormium {
     return m;
   }
 
-  void pegbox(Cabinet& o, const unsigned short tension[]) {
+  void pegbox(Wampum& shells, const unsigned short tension[]) {
     unsigned short i = 0;
-    while (i < o.cords) {
-      o.pitch[i] = tension[i];
+    while (i < shells.cords) {
+      shells.pitch[i] = tension[i];
       i += 1;
     }
   }
 
-  Cabinet populate(const string& tuning) {
-    Cabinet o;
-    o.epoch = time(NULL);
+  Wampum populate(const string& tuning) {
+    Wampum shells;
+    shells.epoch = time(NULL);
 
     if (tuning == "ennead") {
-      o.cords = 9;
+      shells.cords = 9;
       const unsigned short tension[] = {33, 18, 3, 24, 9, 30, 15, 0, 21};
-      pegbox(o, tension);
+      pegbox(shells, tension);
     }
     else if (tuning == "fkbjdn") {
-      o.cords = 6;
+      shells.cords = 6;
       const unsigned short tension[] = {9, 33, 21, 9, 33, 21};
-      pegbox(o, tension);
+      pegbox(shells, tension);
     }
     else if (tuning == "eadgbe") {
-      o.cords = 6;
+      shells.cords = 6;
       const unsigned short tension[] = {15, 0, 24, 9, 30, 15};
-      pegbox(o, tension);
+      pegbox(shells, tension);
     }
     else if (tuning == "cgdae") {
-      o.cords = 5;
+      shells.cords = 5;
       const unsigned short tension[] = {15, 30, 9, 24, 3};
-      pegbox(o, tension);
+      pegbox(shells, tension);
     }
     else if (tuning == "bfbf") {
-      o.cords = 4;
+      shells.cords = 4;
       const unsigned short tension[] = {18, 0, 18, 0};
-      pegbox(o, tension);
+      pegbox(shells, tension);
     }
     else {
-      o.cords = 1;
-      o.pitch[0] = 0;
-      o.m["??"] = "Error, check argument value: " + tuning;
-      return o;
+      shells.cords = 1;
+      shells.pitch[0] = 0;
+      shells.carta["??"] = "Error, check argument value: " + tuning;
+      return shells;
     }
 
-    o.tuned = tuning;
-    o.m = boethius();
+    shells.tuned = tuning;
+    shells.carta = boethius();
 
-    return o;
+    return shells;
   }
 
   string exchange(string& specie, const char& before, const char& after) {
-    const unsigned short n = specie.length();
+    const unsigned short limit = specie.length();
     unsigned short i = 0;
-    while (i < n) {
+    while (i < limit) {
       if (specie[i] == before) specie[i] = after;
       i += 1;
     }
@@ -126,10 +126,10 @@ namespace Phormium {
 
   const string silverSmith(string& specie) { 
     const string before = "_opqrstuvwxyz", after = "-23456789NPQR";
-    const unsigned short n = before.length(), u = after.length();
-    if (n == u) {
+    const unsigned short limit = before.length(), pairs = after.length();
+    if (limit == pairs) {
       unsigned short i = 0;
-      while (i < n) {
+      while (i < limit) {
         specie = exchange(specie, before[i], after[i]);
         i += 1;
       }
@@ -140,8 +140,8 @@ namespace Phormium {
   }
 
   const string permute(const string& genus, const unsigned short& amulet) {
-    const unsigned short n = genus.length();
-    if (n == 36) {
+    const unsigned short limit = genus.length();
+    if (limit == 36) {
       string specie (genus.substr(amulet).append(genus.substr(0, amulet)));
       return silverSmith(specie);
     }
@@ -149,128 +149,125 @@ namespace Phormium {
       return genus + " ?";
   }
 
-  void concierge(Cabinet& o) {
+  void concierge(Wampum& belt) {
     unsigned short i;
     cout << "\n\n";
-    for (o.head = o.m.begin(), o.tail = o.m.end(); o.head != o.tail; ++o.head) {
+    for (belt.head = belt.carta.begin(), belt.tail = belt.carta.end();
+         belt.head != belt.tail; ++belt.head) {
       i = 0; // reset
-      cout << '\t' + o.head->first + '-' + o.tuned + "-e" << o.epoch << '\n';
-      while (i < o.cords) {
-        cout << '\t' + permute(o.head->second, o.pitch[i]) << '\n';
+      cout << "\033[0;33m\t" + belt.head->first + '-';
+      cout << belt.tuned + "-e" << belt.epoch << "\033[0m\n";
+      while (i < belt.cords) {
+        cout << '\t' + permute(belt.head->second, belt.pitch[i]) << '\n';
         i += 1;
       }
       cout << '\n' << endl;
     }
   }
 
-  void concierge(Cabinet& o, const string& keySig) {
+  void concierge(Wampum& belt, const string& keySig) {
     unsigned short i = 0;
     cout << "\n\n";
-    cout << '\t' + keySig + '-' + o.tuned + "-e" << o.epoch << '\n';
-    while (i < o.cords) {
-      cout << '\t' + permute(o.m[keySig], o.pitch[i]) << '\n';
+    cout << "\033[0;33m\t" + keySig + '-' + belt.tuned + "-e" << belt.epoch;
+    cout << "\033[0m\n";
+    while (i < belt.cords) {
+      cout << '\t' + permute(belt.carta[keySig], belt.pitch[i]) << '\n';
       i += 1;
     }
     cout << '\n' << endl;
   }
 
-  void concierge(Cabinet& o, const string& keySig, const string& keyAlt) {
+  void concierge(Wampum& belt, const string& keySig, const string& keyAlt) {
     unsigned short i;
     const string clef[] = {keySig, keyAlt};
     for (unsigned short k = 0; k < 2; ++k) {
       i = 0; // reset
       cout << "\n\n";
-      cout << '\t' + clef[k] + '-' + o.tuned + "-e" << o.epoch << '\n';
-      while (i < o.cords) {
-        cout << '\t' + permute(o.m[clef[k]], o.pitch[i]) << '\n';
+      cout << "\033[0;33m\t" + clef[k] + '-' + belt.tuned + "-e" << belt.epoch;
+      cout << "\033[0m\n";
+      while (i < belt.cords) {
+        cout << '\t' + permute(belt.carta[clef[k]], belt.pitch[i]) << '\n';
         i += 1;
       }
     }
     cout << '\n' << endl;
   }
 
-  void menu_variety() {
-    try {
-      const string tunings[] = {"bfbf", "cgdae", "eadgbe", "fkbjdn", "ennead"};
-      cout << "\nSelection:\n\n";
-      for (unsigned short i = 0; i < 5; ++i) cout << '\t' + tunings[i] << '\n';
-      cout << endl;
-    }
-    catch (const exception& anomaly) {
-      cerr << "\tCheck array length: " << anomaly.what() << '\n' << endl;
-    }
-  }
+  void menu_usage() {
+    unsigned short i;
+    const string tunings[] = {"bfbf", "cgdae", "eadgbe", "fkbjdn", "ennead"};
+    cout << "\033[0;33m\nSelection:\033[0m\n\n";
+    for (i = 0; i < 5; ++i) cout << "\t" + tunings[i] + '\n';
 
-  void menu_signat() {
-    map<string, string> m = boethius();
+    map<string, string> atlas = boethius();
     map<string, string>::iterator head, tail;
-    unsigned short i = 0;
-    cout << "Signature:\n";
-    for (head = m.begin(), tail = m.end(); head != tail; ++head) {
+    i = 0;
+    cout << "\033[0;33m\nSignature:\033[0m\n";
+    for (head = atlas.begin(), tail = atlas.end(); head != tail; ++head) {
       if (i % 7 == 0) cout << '\n';
       else cout << '\t' + head->first;
       i += 1;
     }
-    cout << "\n\n\t./paperboard eadgbe n0 j3\n" << endl;
-  }
+    cout << "\n\n\t./paperboard eadgbe n0 j3\n";
 
-  void menu_usage() {
-    menu_variety();
-    menu_signat();
-    cout << "Screenful:\n";
-    cout << "\n\t./paperboard eadgbe | sensible-pager\n\n";
-    cout << "Save text:\n";
+    cout << "\033[0;33m\nScreenful:\033[0m\n";
+    cout << "\n\t./paperboard eadgbe | sensible-pager\n";
+
+    cout << "\033[0;33m\nSave text:\033[0m\n";
     cout << "\n\t./paperboard eadgbe > exchequer-$(date +'%s').txt\n" << endl;
   }
 
   void atrium(const string& tuning) {
-    Cabinet o = populate(tuning);
-    if (o.cords < 2) menu_usage();
-    else concierge(o);
+    Wampum belt = populate(tuning);
+    if (belt.cords < 2) menu_usage();
+    else concierge(belt);
   }
 
   void atrium(const string& tuning, const string& keySig) {
-    Cabinet o = populate(tuning);
-    if (o.cords < 2) menu_usage();
-    else if (o.m.count(keySig))
-      concierge(o, keySig);
+    Wampum belt = populate(tuning);
+    if (belt.cords < 2) menu_usage();
+    else if (belt.carta.count(keySig))
+      concierge(belt, keySig);
     else {
-      menu_variety();
-      menu_signat();
+      menu_usage();
     }
   }
 
-  void atrium(const string& tuning, const string& keySig, const string& keyAlt) {
-    Cabinet o = populate(tuning);
-    if (o.cords < 2) menu_usage();
-    else if (o.m.count(keySig) and o.m.count(keyAlt))
-      concierge(o, keySig, keyAlt);
+  void atrium(const string& tuning,
+    const string& keySig, const string& keyAlt) {
+    Wampum belt = populate(tuning);
+    if (belt.cords < 2) menu_usage();
+    else if (belt.carta.count(keySig) and belt.carta.count(keyAlt))
+      concierge(belt, keySig, keyAlt);
     else {
-      menu_variety();
-      menu_signat();
+      menu_usage();
     }
   }
 
 } // close Phormium
 
-int main(int argc, char** argv) {
-
-  switch (argc) {
-    case 2 : {
-      const string tuning = argv[1];
-      Phormium::atrium(tuning);
-    } break;
-    case 3 : {
-      const string tuning = argv[1], keySig = argv[2];
-      Phormium::atrium(tuning, keySig);
-    } break;
-    case 4 : {
-      const string tuning = argv[1], keySig = argv[2], keyAlt = argv[3];
-      Phormium::atrium(tuning, keySig, keyAlt);
-    } break;
-    default: Phormium::menu_usage();
+int main(int argc, char* argv[]) {
+  try {
+    switch (argc) {
+      case 2 : {
+        const string tuning = argv[1];
+        Phormium::atrium(tuning);
+      } break;
+      case 3 : {
+        const string tuning = argv[1], keySig = argv[2];
+        Phormium::atrium(tuning, keySig);
+      } break;
+      case 4 : {
+        const string tuning = argv[1], keySig = argv[2], keyAlt = argv[3];
+        Phormium::atrium(tuning, keySig, keyAlt);
+      } break;
+      default: Phormium::menu_usage();
+    }
   }
-
+  catch (const exception& anomaly) {
+    cerr << "\033[0;33m\n\texception: ";
+    cerr << anomaly.what() << "\033[0m\n" << endl;
+  }
   return 0;
 }
 
