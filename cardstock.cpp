@@ -153,10 +153,10 @@ namespace Phormium {
     unsigned short i;
     cout << "\n\n";
     for (belt.head = belt.carta.begin(), belt.tail = belt.carta.end();
-         belt.head != belt.tail; ++belt.head) {
+    belt.head != belt.tail; ++belt.head) {
       i = 0; // reset
-      cout << "\033[0;33m\t" + belt.head->first + '-';
-      cout << belt.tuned + "-e" << belt.epoch << "\033[0m\n";
+      cout << '\t' + belt.head->first + '-';
+      cout << belt.tuned + "-e" << belt.epoch << '\n';
       while (i < belt.cords) {
         cout << '\t' + permute(belt.head->second, belt.pitch[i]) << '\n';
         i += 1;
